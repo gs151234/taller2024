@@ -1,0 +1,36 @@
+---
+- hosts: rocky
+  user: sysadmin
+  become: true
+  vars_files:
+  - ./vars/personal.yml
+  tasks:
+
+  - name: tener instalado el serirodr apache
+    ansible.builtin.yum:
+     name: httpd
+     state: present
+
+  - name: Apache iniciado y habilitado
+    ansible.builtin.service:
+     name: httpd
+     state: started
+     enabled: true
+
+  - name: Habilitar puertos 80 y 443
+    ansible.posix.firewalld:
+      service: "{{ item }}"
+      state: enabled
+      permanent: true
+      immediate: true
+    loop:
+    - http
+    - https
+
+    - name: Instalar index.html customizado con un template
+      ansible.builtin.template:
+       src: ./templates/index.j2
+       dest: /var/www.html/index.html
+       mode: '0444'
+       owner: apache
+       group: apache

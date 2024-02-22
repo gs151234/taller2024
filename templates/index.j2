@@ -1,0 +1,17 @@
+<html>
+<head>
+  <title> Servidor web en {{ ansible_hostname }} </title>
+</head>
+<body>
+
+
+<p> Mi nombre es {{ ansilbe_fqdn }}
+<p> la ditribucion es {{ ansible_distribution  }} version {{ ansible_distribution_version }}
+<p> La fecha de hoy es {{ ansible_date_time.date }}
+<p> Mi IP V4 es {{ ansible_all_ipv4_addresses[0] }} 
+<p> El autor es {{ AUTOR }}
+<P> Mi grupo musical favorito es {{ GRUPO_MUSICAL }}
+
+</body>
+</html>
+
