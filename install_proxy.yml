@@ -1,0 +1,24 @@
+---
+- name: Configurar httpd como Proxy Reverso en Ubuntu
+  hosts: ubuntu
+  become: true
+
+  tasks:
+    - name: Instalar httpd
+      apt:
+        name: apache2
+        state: present
+
+    - name: Habilitar los módulos necesarios
+      apache2_module:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - proxy
+        - proxy_http
+
+    - name: Configurar el archivo de sitio para el proxy reverso
+      template:
+        src: httpd_proxy.conf.j2
+        dest: /etc/apache2/sites-available/000-default.conf
+      notify: Reiniciar httpd

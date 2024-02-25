@@ -1,0 +1,24 @@
+---
+
+- hosts: all
+  user: sysadmin
+  become: true
+
+  tasks:
+
+  - name: Crear usuario Ansible
+    ansible.builtin.user:
+      name: ansible
+      
+  - name: Convertir usuario Ansible en sudoer sin password
+    ansible.builtin.lineinfile:
+      path: /etc/sudoers
+      state: present
+      line: 'ansible ALL=(ALL) NOPASSWD: ALL'
+      insertafter: EOF
+
+  - name: Copiar clave publica a los nodos
+    ansible.builtin.authorized_key:
+      user: ansible
+      state: present
+      key: "{{ lookup('file', '/home/sysadmin/.ssh/id_rsa.pub') }}"
